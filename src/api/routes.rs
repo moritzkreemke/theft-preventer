@@ -1,10 +1,10 @@
-use actix_web::{web, HttpResponse, Responder};
+use actix_web::{web, HttpResponse};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use crate::auth;
 use crate::config::Config;
-use crate::db::{DbPool, Event, insert_event, get_latest_event, get_events, get_total_events};
+use crate::db::{DbPool, Event, insert_event, get_latest_event, get_events};
 use crate::error::AppError;
+use crate::services;
 
 #[derive(Deserialize, Serialize)]
 pub struct EventInput {
@@ -36,7 +36,8 @@ struct PaginatedResponse<T> {
 
 pub async fn add_event(
     event_input: web::Json<EventInput>,
-    pool: web::Data<DbPool>
+    pool: web::Data<DbPool>,
+    config: web::Data<Config>
 ) -> Result<HttpResponse, AppError> {
     let event = Event {
         id: None,
@@ -46,6 +47,15 @@ pub async fn add_event(
         phone: event_input.phone.clone(),
         timestamp: chrono::Utc::now().timestamp(),
     };
+
+    if event.phone == "disconnected" {
+        if let Err(e) = services::twilio_service::send_sms(
+            "Your door was open/closed while you were disconnected. Please check the app for more details.",
+            &config
+        ).await {
+            eprintln!("Failed to send SMS: {}", e);
+        }
+    }
 
     match insert_event(&pool, &event) {
         Ok(_) => Ok(HttpResponse::Ok().json(event)),

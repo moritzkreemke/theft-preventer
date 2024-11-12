@@ -17,7 +17,7 @@ class ESP32Service @Inject constructor(
             val response: String = client.get("${settingsDataStore.getEsp32Ip()}/receive_data").body()
             response.substringAfter("IP: ").trim()
         } catch (e: Exception) {
-            ""
+            "Exception"
         }
     }
 

@@ -28,8 +28,16 @@ class LoginViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val token = authRepository.getToken()
+            val esp32Ip = settingsDataStore.getEsp32Ip()
+            val backendIp = settingsDataStore.getBackendIp()
             if (token != null) {
                 _state.value = _state.value.copy(isLoggedIn = true)
+            }
+            if (esp32Ip != null) {
+                _state.value = _state.value.copy(esp32Ip = esp32Ip)
+            }
+            if (backendIp != null) {
+                _state.value = _state.value.copy(backendIp = backendIp)
             }
         }
     }

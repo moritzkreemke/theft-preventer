@@ -8,12 +8,12 @@ static const char *TAG = "http_client";
 
 void send_post_request(const char* state, const char* lux, const char* temp, const char* id) {
     esp_http_client_config_t config = {
-        .url = "http://192.168.0.20:8080/api/add/event", //TODO set in config
+        .url = BACKEND_SERVER_IP "/api/add/event",
         .method = HTTP_METHOD_POST,
     };
     esp_http_client_handle_t client = esp_http_client_init(&config);
 
-    esp_http_client_set_header(client, "X-API-Key", "your_api_key_here");
+    esp_http_client_set_header(client, "X-API-Key", BACKEND_API_KEY);
     esp_http_client_set_header(client, "Content-Type", "application/json");
 
     bool device_reachable = is_device_reachable();

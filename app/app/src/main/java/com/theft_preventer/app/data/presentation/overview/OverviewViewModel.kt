@@ -36,8 +36,9 @@ class OverviewViewModel @Inject constructor(
                 val deviceIp = esp32Service.getDeviceIp()
                 val currentDeviceIp = esp32Service.getCurrentDeviceIp()
                 _state.value = when {
-                    deviceIp.isEmpty() -> _state.value.copy(deviceStatus = DeviceStatus.ESP_NOT_AVAILABLE)
+                    deviceIp == "Exception" -> _state.value.copy(deviceStatus = DeviceStatus.ESP_NOT_AVAILABLE)
                     deviceIp == currentDeviceIp -> _state.value.copy(deviceStatus = DeviceStatus.REGISTERED)
+                    deviceIp.isEmpty() -> _state.value.copy(deviceStatus = DeviceStatus.NOT_REGISTERED)
                     else -> _state.value.copy(deviceStatus = DeviceStatus.NOT_REGISTERED)
                 }
             } catch (e: Exception) {

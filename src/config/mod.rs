@@ -13,6 +13,10 @@ pub struct Config {
     pub admin_username: String,
     pub admin_password: String,
     pub database_location: PathBuf,
+    pub twilio_account_sid: String,
+    pub twilio_auth_token: String,
+    pub twilio_from_number: String,
+    pub admin_phone_number: String,
 }
 
 impl Config {
@@ -34,6 +38,10 @@ impl Config {
             database_location: env::var("APP_DATABASE_LOCATION")
                 .map(PathBuf::from)
                 .unwrap_or(file_config.database_location),
+            twilio_account_sid: env::var("TWILIO_ACCOUNT_SID").unwrap_or(file_config.twilio_account_sid),
+            twilio_auth_token: env::var("TWILIO_AUTH_TOKEN").unwrap_or(file_config.twilio_auth_token),
+            twilio_from_number: env::var("TWILIO_FROM_NUMBER").unwrap_or(file_config.twilio_from_number),
+            admin_phone_number: env::var("ADMIN_PHONE_NUMBER").unwrap_or(file_config.admin_phone_number),
         })
     }
 

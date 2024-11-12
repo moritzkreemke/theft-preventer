@@ -1,7 +1,6 @@
 use actix_files as fs;
 use actix_web::{web, App, HttpServer, dev::ServiceRequest, Error};
 use actix_web::dev::ServiceResponse;
-use actix_web::web::Data;
 use crate::config::Config;
 use actix_web_httpauth::middleware::HttpAuthentication;
 use actix_web_httpauth::extractors::bearer::BearerAuth;
@@ -13,6 +12,7 @@ mod middleware;
 mod db;
 mod auth;
 mod error;
+mod services;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
