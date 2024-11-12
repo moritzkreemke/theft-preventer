@@ -1,0 +1,37 @@
+{
+    "C_Cpp.intelliSenseEngine": "default",
+    "idf.adapterTargetName": "esp32",
+    "idf.customExtraPaths": "/home/moritz/.espressif/tools/xtensa-esp-elf-gdb/14.2_20240403/xtensa-esp-elf-gdb/bin:/home/moritz/.espressif/tools/riscv32-esp-elf-gdb/14.2_20240403/riscv32-esp-elf-gdb/bin:/home/moritz/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20240906/xtensa-esp-elf/bin:/home/moritz/.espressif/tools/riscv32-esp-elf/esp-14.2.0_20240906/riscv32-esp-elf/bin:/home/moritz/.espressif/tools/esp32ulp-elf/2.38_20240113/esp32ulp-elf/bin:/home/moritz/.espressif/tools/openocd-esp32/v0.12.0-esp32-20241016/openocd-esp32/bin:/home/moritz/.espressif/tools/esp-rom-elfs/20241011",
+    "idf.customExtraVars": {
+        "OPENOCD_SCRIPTS": "/home/moritz/.espressif/tools/openocd-esp32/v0.12.0-esp32-20241016/openocd-esp32/share/openocd/scripts",
+        "ESP_ROM_ELF_DIR": "/home/moritz/.espressif/tools/esp-rom-elfs/20241011/"
+    },
+    "idf.espIdfPath": "/home/moritz/esp/esp-idf",
+    "idf.openOcdConfigs": [
+        "board/esp32-wrover-kit-3.3v.cfg"
+    ],
+    "idf.port": "/dev/ttyUSB0",
+    "idf.pythonBinPath": "/home/moritz/.espressif/python_env/idf5.5_py3.12_env/bin/python",
+    "idf.toolsPath": "/home/moritz/.espressif",
+    "idf.flashType": "UART",
+    "files.associations": {
+        "stdio.h": "c",
+        "event_groups.h": "c",
+        "inttypes.h": "c",
+        "esp_wifi.h": "c",
+        "esp_event.h": "c",
+        "freertos.h": "c",
+        "esp_log.h": "c",
+        "nvs_flash.h": "c",
+        "webserver.h": "c",
+        "esp_http_client.h": "c",
+        "http_client.h": "c",
+        "string.h": "c",
+        "stdlib.h": "c",
+        "etharp.h": "c",
+        "esp_netif.h": "c",
+        "esp_netif_defaults.h": "c",
+        "ping_sock.h": "c",
+        "esp_netif_net_stack.h": "c"
+    }
+}

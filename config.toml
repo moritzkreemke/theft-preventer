@@ -1,0 +1,8 @@
+host = "0.0.0.0"
+port = 8080
+
+secret_key = "your_very_secure_and_long_secret_key_here"
+api_key = "your_api_key_here"
+admin_username = "admin"
+admin_password = "admin"
+database_location = "/data/theft-preventer.db"
