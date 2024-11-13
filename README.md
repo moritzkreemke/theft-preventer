@@ -2,16 +2,11 @@
 
 A quick and simple project to get notifications when someone enters your apartment and you're not there.
 
-<div style="display: flex; justify-content: center; gap: 20px;">
-  <div style="flex: 0 0 35%;">
-    <img src="docs/img1.png" alt="Screenshot 1" style="width: 100%;">
-    <p><em>Screenshot of the Android App which displays all Events.</em></p>
-  </div>
-  <div style="flex: 0 0 35%;">
-    <img src="docs/img2.png" alt="Screenshot 2" style="width: 100%;">
-    <p><em>SMS Notifications when Door is open/closed without the Phone in the network</em></p>
-  </div>
-</div>
+| Android App | SMS Notifications |
+|:-----------:|:-----------------:|
+| <img src="docs/img1.png" width="300" alt="Android App"> | <img src="docs/img2.png" width="300" alt="SMS Notifications"> |
+| Screenshot of the Android App which displays all Events. | SMS Notifications when Door is open/closed without the Phone in the network |
+
 
 ## Overview
 
