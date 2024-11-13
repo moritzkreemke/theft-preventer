@@ -5,7 +5,7 @@ A quick and simple project to get notifications when someone enters your apartme
 | Android App | SMS Notifications |
 |:-----------:|:-----------------:|
 | <img src="docs/img1.png" width="300" alt="Android App"> | <img src="docs/img2.png" width="300" alt="SMS Notifications"> |
-| Screenshot of the Android App which displays all Events. | SMS Notifications when Door is open/closed without the Phone in the network |
+| Screenshot of the Android app displaying all events. | SMS notifications when the door is opened or closed while your phone is not on the network. |
 
 
 ## Overview
