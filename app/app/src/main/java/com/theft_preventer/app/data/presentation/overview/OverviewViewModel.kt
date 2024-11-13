@@ -84,6 +84,10 @@ fun loadEvents() {
         }
     }
 
+    fun refreshEvents() {
+        loadEvents()
+    }
+
     fun logout() {
         viewModelScope.launch {
             authRepository.logout()

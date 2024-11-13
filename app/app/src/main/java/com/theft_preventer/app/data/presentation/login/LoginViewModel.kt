@@ -68,6 +68,8 @@ class LoginViewModel @Inject constructor(
                 isLoggedIn = result.isSuccess,
                 error = result.exceptionOrNull()?.message
             )
+            settingsDataStore.saveUsername(_state.value.username)
+            settingsDataStore.savePassword(_state.value.password)
         }
     }
     fun saveSettings() {

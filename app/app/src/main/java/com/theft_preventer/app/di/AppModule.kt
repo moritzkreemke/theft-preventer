@@ -54,8 +54,9 @@ object AppModule {
     @Singleton
     fun provideEventRepository(
         apiService: ApiService,
-        authRepository: AuthRepository
+        authRepository: AuthRepository,
+        settingsDataStore: SettingsDataStore
     ): EventRepository {
-        return EventRepository(apiService, authRepository)
+        return EventRepository(apiService, authRepository, settingsDataStore)
     }
 }

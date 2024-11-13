@@ -18,6 +18,8 @@ class SettingsDataStore @Inject constructor(@ApplicationContext context: Context
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val ESP_32_IP_KEY = stringPreferencesKey("esp32_ip")
         private val BACKEND_IP_KEY = stringPreferencesKey("backend_ip")
+        private val USERNAME_TOKEN = stringPreferencesKey("username")
+        private val PASSWORD_TOKEN = stringPreferencesKey("password")
     }
 
     suspend fun saveToken(token: String) {
@@ -57,6 +59,28 @@ class SettingsDataStore @Inject constructor(@ApplicationContext context: Context
     suspend fun getBackendIp(): String? {
         return dataStore.data.map { preferences ->
             preferences[BACKEND_IP_KEY]
+        }.firstOrNull()
+    }
+
+    suspend fun saveUsername(username: String) {
+        dataStore.edit { preferences ->
+            preferences[USERNAME_TOKEN] = username
+        }
+    }
+    suspend fun getUsername(): String? {
+        return dataStore.data.map { preferences ->
+            preferences[USERNAME_TOKEN]
+        }.firstOrNull()
+    }
+
+    suspend fun savePassword(password: String) {
+        dataStore.edit { preferences ->
+            preferences[PASSWORD_TOKEN] = password
+        }
+    }
+    suspend fun getPassword(): String? {
+        return dataStore.data.map { preferences ->
+            preferences[PASSWORD_TOKEN]
         }.firstOrNull()
     }
 }

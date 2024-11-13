@@ -1,5 +1,6 @@
 package com.theft_preventer.app.data.presentation.overview
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -19,10 +21,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +29,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.theft_preventer.app.data.remote.ApiService
 import java.util.Date
 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.pullToRefresh
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.runtime.*
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
     viewModel: OverviewViewModel = hiltViewModel(),
@@ -38,58 +47,89 @@ fun OverviewScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
+    var isRefreshing by remember { mutableStateOf(false) }
+    val pullToRefreshState = rememberPullToRefreshState()
+    val coroutineScope = rememberCoroutineScope()
+
     LaunchedEffect(state.isLoggedOut) {
         if (state.isLoggedOut) {
             onLogout()
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text("Events Overview", style = MaterialTheme.typography.headlineSmall)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        when (state.deviceStatus) {
-            DeviceStatus.LOADING -> {
-                CircularProgressIndicator()
-            }
-            DeviceStatus.REGISTERED -> {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Device Registered")
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Icon(Icons.Default.CheckCircle, contentDescription = "Registered", tint = Color.Green)
-                }
-            }
-            DeviceStatus.NOT_REGISTERED -> {
-                Button(onClick = { viewModel.registerDevice() }) {
-                    Text("Register Device")
-                }
-            }
-            DeviceStatus.ESP_NOT_AVAILABLE -> {
-                Text("ESP32 not available", color = Color.Red)
-            }
+    val onRefresh: () -> Unit = {
+        isRefreshing = true
+        coroutineScope.launch {
+            viewModel.refreshEvents()
+            isRefreshing = false
         }
+    }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = { viewModel.logout() }) {
-            Text("Logout")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (state.isLoading) {
-            CircularProgressIndicator()
-        } else if (state.error != null) {
-            Text(state.error!!, color = Color.Red)
-        } else {
-            LazyColumn {
-                items(state.events) { event ->
-                    EventItem(event)
+    Scaffold(
+        modifier = Modifier.pullToRefresh(
+            state = pullToRefreshState,
+            isRefreshing = isRefreshing,
+            onRefresh = onRefresh
+        ),
+        topBar = {
+            TopAppBar(
+                title = { Text("Events Overview") },
+                actions = {
+                    IconButton(onClick = onRefresh) {
+                        Icon(Icons.Filled.Refresh, "Trigger Refresh")
+                    }
                 }
+            )
+        }
+    ) { paddingValues ->
+        Box(Modifier.padding(paddingValues)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                when (state.deviceStatus) {
+                    DeviceStatus.LOADING -> {
+                        CircularProgressIndicator()
+                    }
+                    DeviceStatus.REGISTERED -> {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("Device Registered")
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Icon(Icons.Default.CheckCircle, contentDescription = "Registered", tint = Color.Green)
+                        }
+                    }
+                    DeviceStatus.NOT_REGISTERED -> {
+                        Button(onClick = { viewModel.registerDevice() }) {
+                            Text("Register Device")
+                        }
+                    }
+                    DeviceStatus.ESP_NOT_AVAILABLE -> {
+                        Text("ESP32 not available", color = Color.Red)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = { viewModel.logout() }) {
+                    Text("Logout")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (state.error != null) {
+                    Text(state.error!!, color = Color.Red)
+                } else {
+                    LazyColumn {
+                        items(state.events) { event ->
+                            EventItem(event)
+                        }
+                    }
+                }
+            }
+
+            if (isRefreshing) {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
         }
     }
